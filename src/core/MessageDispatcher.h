@@ -1,5 +1,4 @@
 #pragma once
-#include "Session.h"
 #include <string>
 #include <unordered_map>
 #include <functional>

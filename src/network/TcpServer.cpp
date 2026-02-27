@@ -44,7 +44,7 @@ void TcpServer::AcceptClient() {
         
     if (fd < 0) return;
         
-    sessions[fd] = std::make_unique<Session>(fd);
+    sessions[fd] = std::make_unique<Session>(fd, &dispatcher);
         
     std::cout << "Client connected: " << fd << "\n";
 }
@@ -61,9 +61,11 @@ void TcpServer::ReceiveClient(int fd) {
         return;
     }
 
-    std::string msg(buffer);
+    std::string msg(buffer, ret);
 
-    sessions[fd]->Send("Echo: " + msg);
+    if (sessions[fd]) {
+        sessions[fd]->OnReceive(msg);
+    }
 }
 
 void TcpServer::Run() {
